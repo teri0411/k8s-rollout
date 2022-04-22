@@ -1,0 +1,28 @@
+a. 롤백을 시도하기 전의 롤아웃 히스토리
+#입력 
+kubectl rollout history deployment cozserver-deployment
+
+#출력
+deployment.apps/cozserver-deployment
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=cozserver-deployment-v1.yaml --record=true
+2         kubectl apply --filename=cozserver-deployment-v2.yaml --record=true
+3         kubectl apply --filename=cozserver-deployment-v3.yaml --record=true
+
+b. 롤백을 시도한 결과
+#입력
+kubectl rollout undo deployment/cozserver-deployment --to-revision=2
+
+#출력
+deployment.apps/cozserver-deployment rolled back
+
+c. 롤백 후 롤아웃 히스토리
+#입력
+kubectl rollout history deployment cozserver-deployment
+
+#출력
+deployment.apps/cozserver-deployment 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=cozserver-deployment-v1.yaml --record=true
+3         kubectl apply --filename=cozserver-deployment-v3.yaml --record=true
+4         kubectl apply --filename=cozserver-deployment-v2.yaml --record=true
