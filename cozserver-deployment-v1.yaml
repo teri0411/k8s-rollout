@@ -27,5 +27,14 @@ spec:
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
           successThreshold: 1 # 1번 성공하면 성공으로 보겠다.
 
+      initContainers: #init 컨테이너 추가
+      - name: init-myservice
+        image: sebcontents/cozserver:1.0
+        command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+      - name: init-mydb
+        image: sebcontents/cozserver:1.0
+        command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+
+
         ports:
         - containerPort: 8080
