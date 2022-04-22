@@ -5,7 +5,7 @@ metadata:
   labels:
     app: cozserver
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: cozserver
@@ -17,5 +17,15 @@ spec:
       containers:
       - name: cozserver
         image: sebcontents/cozserver:1.0
+        livenessProbe:
+          failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1 # *초 후 건강검진 
+          periodSeconds: 30 # *초마다 건강검진 
+          timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
+          successThreshold: 1 # 1번 성공하면 성공으로 보겠다.
+
         ports:
-        - containerPort: 80
+        - containerPort: 8080
