@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemonset-cozserver
+spec: 
+  # 데몬셋은 컨테이너 종류만 넣어주면 노드당 pod 하나씩 보장해줌.
+  selector: 
+    matchLabels:
+      app: cozserver  
+  template:
+    metadata:
+      labels:
+        app: cozserver #selector의 라벨과 동일해야함.
+    spec:
+      containers:
+      - name: cozserver
+        image: sebcontents/cozserver:1.0

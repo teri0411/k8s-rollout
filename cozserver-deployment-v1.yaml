@@ -4,26 +4,26 @@ metadata:
   name: cozserver-deployment
   labels:
     app: cozserver
-spec:
-  replicas: 1
-  selector:
+spec: #ReplicaSet을 컨트롤해서 Pod수를 조절
+  replicas: 3 # cozserver *개 보장해주란 의미
+  selector: 
     matchLabels:
-      app: cozserver
+      app: cozserver  
   template:
     metadata:
       labels:
-        app: cozserver
+        app: cozserver #selector의 라벨과 동일해야함.
     spec:
       containers:
       - name: cozserver
         image: sebcontents/cozserver:1.0
         livenessProbe:
-          failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
           httpGet:
             path: /
             port: 8080
+          failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
           initialDelaySeconds: 1 # *초 후 건강검진 
-          periodSeconds: 30 # *초마다 건강검진 
+          periodSeconds: 1 # *초마다 건강검진 
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
           successThreshold: 1 # 1번 성공하면 성공으로 보겠다.
 
@@ -46,6 +46,6 @@ spec:
           limits:
             cpu: 1
             memory: 500Mi
-        env:
+        env: #환경변수 설정 test
         - name: MYVAR
           value: "testvalue"

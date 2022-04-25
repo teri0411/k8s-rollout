@@ -20,10 +20,10 @@ spec:
       - name: cozserver
         image: sebcontents/cozserver:3.0
         livenessProbe:
-          failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
           httpGet:
             path: /
             port: 8080
+          failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
           initialDelaySeconds: 1 # *초 후 건강검진 
           periodSeconds: 30 # *초마다 건강검진 
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
