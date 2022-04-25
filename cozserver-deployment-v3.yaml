@@ -5,7 +5,8 @@ metadata:
   labels:
     app: cozserver
 spec:
-  replicas: 1
+  replicas: 3
+  minReadySeconds: 8
   strategy:
     type: RollingUpdate
   selector:
@@ -24,8 +25,8 @@ spec:
             path: /
             port: 8080
           failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
-          initialDelaySeconds: 1 # *초 후 건강검진 
-          periodSeconds: 30 # *초마다 건강검진 
+          initialDelaySeconds: 5 # *초 후 건강검진 
+          periodSeconds: 1 # *초마다 건강검진 
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
           successThreshold: 1 # 1번 성공하면 성공으로 보겠다.
         ports:

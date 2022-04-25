@@ -6,9 +6,11 @@ metadata:
     app: cozserver
 spec: #ReplicaSet을 컨트롤해서 Pod수를 조절
   replicas: 3 # cozserver *개 보장해주란 의미
+  minReadySeconds: 8
   selector: 
     matchLabels:
       app: cozserver  
+  
   template:
     metadata:
       labels:
@@ -22,7 +24,7 @@ spec: #ReplicaSet을 컨트롤해서 Pod수를 조절
             path: /
             port: 8080
           failureThreshold: 3 # 3번 실패하면 실패로 보겠다.
-          initialDelaySeconds: 1 # *초 후 건강검진 
+          initialDelaySeconds: 5 # *초 후 건강검진 
           periodSeconds: 1 # *초마다 건강검진 
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
           successThreshold: 1 # 1번 성공하면 성공으로 보겠다.

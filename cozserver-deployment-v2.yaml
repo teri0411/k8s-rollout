@@ -5,7 +5,8 @@ metadata:
   labels:
     app: cozserver
 spec:
-  replicas: 1
+  replicas: 3
+  minReadySeconds: 8
   strategy:
     type: RollingUpdate
   selector:
@@ -24,9 +25,31 @@ spec:
             path: /
             port: 8080
           failureThreshold: 3 # 3번 실패하면 실패로 보겠다.            
-          initialDelaySeconds: 1 # *초 후 건강검진 
-          periodSeconds: 30 # *초마다 건강검진 
+          initialDelaySeconds: 5 # *초 후 건강검진 
+          periodSeconds: 1 # *초마다 건강검진 
           timeoutSeconds: 3 # *초까지 응답이없으면 실패로 봄
           successThreshold: 1 # 1번 성공하면 성공으로 보겠다.
+
+      initContainers: #init 컨테이너 추가
+      - name: init-myservice
+        image: sebcontents/cozserver:1.0
+        command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+      - name: init-mydb
+        image: sebcontents/cozserver:1.0
+        command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+
+
+
         ports:
         - containerPort: 8080
+
+        resources:  # pod에 리소스 할당(1MB =1000kb , 1MiB = 1024kib)
+          requests:
+            cpu: 200m
+            memory: 250Mi
+          limits:
+            cpu: 1
+            memory: 500Mi
+        env: #환경변수 설정 test
+        - name: MYVAR
+          value: "testvalue"
