@@ -19,7 +19,7 @@ spec: #ReplicaSet을 컨트롤해서 Pod수를 조절
       containers:
       - name: cozserver
         image: sebcontents/cozserver:1.0
-        livenessProbe:
+        readinessProbe:
           httpGet:
             path: /
             port: 8080

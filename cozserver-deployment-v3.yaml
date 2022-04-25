@@ -20,7 +20,7 @@ spec:
       containers:
       - name: cozserver
         image: sebcontents/cozserver:3.0
-        livenessProbe:
+        readinessProbe:
           httpGet:
             path: /
             port: 8080
