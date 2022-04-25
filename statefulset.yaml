@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sf-cozserver
+spec:
+  replicas: 3
+  serviceName: sf-service
+  podManagementPolicy: Parallel #OrderedReady가 디폴트, 순차적으로 실행
+  selector:
+    matchLabels:
+      app: cozserver  # cozserver 1개 보장해주란 의미
+  template:
+    metadata:
+      name: cozserver-pod
+      labels:
+        app: cozserver #selector의 라벨과 동일해야함.
+    spec:
+      containers:
+      - name: cozserver
+        image: sebcontents/cozserver:1.0
